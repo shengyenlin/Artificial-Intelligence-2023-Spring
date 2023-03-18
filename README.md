@@ -5,3 +5,7 @@ This course is a graduate-level artificial intelligence course completely taught
 This repo contains my solutions to the homework as well as the final project. 
 
 Professor: [Jane Yung-jen Hsu](https://iagentntu.github.io/professor/Jane.html), department of computer science and information @ National Taiwan University 
+
+## Homework assignments
+- HW1: DFS, BFS
+
