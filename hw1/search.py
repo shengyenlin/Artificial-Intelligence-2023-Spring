@@ -87,12 +87,69 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    stack = util.Stack()
+    visited = set()
+    # initialize a dictionary to keep track of the parent vertex of each vertex 
+    start = problem.getStartState()
+
+    parents = dict()
+    parents = {
+        start: [None, None] # current node :[parent node position, direction (parent->current)]
+        }
+    stack.push(start)
+
+    if problem.isGoalState(start):
+        return []
+    
+    else:
+        while not stack.isEmpty():
+            cur_node_pos = stack.pop() # the first node only stores position info
+            # print("current node:", cur_node_pos)
+            if cur_node_pos not in visited:
+                visited.add(cur_node_pos)
+
+            # check if it's the goal
+            if problem.isGoalState(cur_node_pos):
+                path = []
+                while cur_node_pos is not None:
+                    # track back to the first node (the parent node of the first node is none)
+                    prev_node_dir = parents[cur_node_pos][1]
+                    path.append(prev_node_dir)
+                    cur_node_pos = parents[cur_node_pos][0]
+                    
+                path = path[::-1][1:] # reverse directions and remove None
+                return path
+            
+            # else search
+            neighbors = problem.getSuccessors(cur_node_pos)
+            for neighbor in neighbors:
+                neighbor_pos = neighbor[0]
+                par_neigh_dir = neighbor[1]
+                neighbor_cost = neighbor[2]
+
+                if neighbor_pos not in visited:
+                    stack.push(neighbor_pos)
+                    parents[neighbor_pos] = [cur_node_pos, par_neigh_dir]
+                           
+    return []
+    
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    queue = util.Queue()
+    visited = set()
+    # initialize a dictionary to keep track of the parent vertex of each vertex 
+    start = problem.getStartState()
+
+    parents = dict()
+    parents = {
+        start: [None, None] # current node :[parent node position, direction (parent->current)]
+        }
+
+    if problem.isGoalState(start):
+        return []
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
@@ -105,6 +162,7 @@ def nullHeuristic(state, problem=None):
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
     return 0
+
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
