@@ -150,11 +150,95 @@ def breadthFirstSearch(problem: SearchProblem):
 
     if problem.isGoalState(start):
         return []
+    
+    queue.push(start)
+    visited.add(start)
+
+    while not queue.isEmpty():
+        cur_node_pos = queue.pop()
+
+        if problem.isGoalState(cur_node_pos):
+            end_pos = cur_node_pos
+            break
+        neighbors = problem.getSuccessors(cur_node_pos)
+        for neighbor in neighbors:
+            neighbor_pos = neighbor[0]
+            par_neigh_dir = neighbor[1]
+
+            if neighbor_pos not in visited:
+                visited.add(neighbor_pos)
+                parents[neighbor_pos] = [cur_node_pos, par_neigh_dir]
+                queue.push(neighbor_pos)
+
+    path = []
+    if cur_node_pos in visited:
+        while end_pos != start:
+            prev_node_dir = parents[end_pos][1]
+            path.append(prev_node_dir)
+            end_pos = parents[end_pos][0]
+            
+        path = path[::-1] # reverse directions
+        return path  
+    
+    return []
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    pq = util.PriorityQueue()
+
+    start = problem.getStartState() # the first node only stores position info
+
+    parents = {
+        start: [None, None] # current node :[parent node position, direction (parent->current)]
+        }
+
+    explored = {
+        start: 0 #explored node's position, path cost (from starting node to the node)
+    }
+
+    pq.push(start, priority=0)
+
+    if problem.isGoalState(start):
+        return []   
+    
+    # pos, neighbor direction, neighbor cost
+    while not pq.isEmpty():
+        cur_node_pos = pq.pop()
+        cur_node_cost = explored[cur_node_pos]
+
+        if problem.isGoalState(cur_node_pos):
+            path = []
+            while cur_node_pos is not None:
+                # track back to the first node (the parent node of the first node is none)
+
+                prev_node_dir = parents[cur_node_pos][1]
+                path.append(prev_node_dir)
+                cur_node_pos = parents[cur_node_pos][0]
+            path = path[::-1][1:] # reverse directions and remove None
+            return path
+            
+        neighbors = problem.getSuccessors(cur_node_pos)
+
+        for neighbor in neighbors:
+            neighbor_pos = neighbor[0]
+            par_neigh_dir = neighbor[1]
+            neighbor_cost = neighbor[2]
+
+            neigh_path_cost = cur_node_cost + neighbor_cost
+
+            if neighbor_pos not in explored:
+                explored[neighbor_pos] = neigh_path_cost
+                parents[neighbor_pos] = [cur_node_pos, par_neigh_dir]
+                pq.push(neighbor_pos, neigh_path_cost)
+
+            elif neigh_path_cost < explored[neighbor_pos]:
+                explored[neighbor_pos] = neigh_path_cost
+                parents[neighbor_pos] = [cur_node_pos, par_neigh_dir]
+                pq.update(neighbor_pos, neigh_path_cost)
+
+    return None
+        
 
 def nullHeuristic(state, problem=None):
     """
@@ -167,7 +251,61 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    pq = util.PriorityQueue()
+    start = problem.getStartState() # the first node only stores position info    
+
+    parents = {
+        start: [None, None] # current node :[parent node position, direction (parent->current)]
+        }
+
+    explored = {
+        start: 0 #explored node's position, path cost (from starting node to the node)
+    }
+
+    pq.push(start, priority=0)
+
+    if problem.isGoalState(start):
+        return []   
+
+    # pos, neighbor direction, neighbor cost
+    while not pq.isEmpty():
+        cur_node_pos = pq.pop()
+        cur_node_cost = explored[cur_node_pos]
+
+        if problem.isGoalState(cur_node_pos):
+            path = []
+
+            while cur_node_pos is not None:
+                # track back to the first node (the parent node of the first node is none)
+                prev_node_dir = parents[cur_node_pos][1]
+                path.append(prev_node_dir)
+                cur_node_pos = parents[cur_node_pos][0]
+            path = path[::-1][1:] # reverse directions and remove None
+            return path
+            
+        neighbors = problem.getSuccessors(cur_node_pos)
+
+        for neighbor in neighbors:
+            neighbor_pos = neighbor[0]
+            par_neigh_dir = neighbor[1]
+            neighbor_cost = neighbor[2]
+            estimated_cost = heuristic(neighbor_pos, problem)
+
+            neigh_path_cost = cur_node_cost + neighbor_cost
+
+            if neighbor_pos not in explored:
+                explored[neighbor_pos] = neigh_path_cost
+                parents[neighbor_pos] = [cur_node_pos, par_neigh_dir]
+                neigh_path_cost = cur_node_cost + neighbor_cost + estimated_cost
+                pq.push(neighbor_pos, neigh_path_cost)
+
+            elif neigh_path_cost < explored[neighbor_pos]:
+                explored[neighbor_pos] = neigh_path_cost
+                parents[neighbor_pos] = [cur_node_pos, par_neigh_dir]
+                neigh_path_cost = cur_node_cost + neighbor_cost + estimated_cost
+                pq.update(neighbor_pos, neigh_path_cost)
+
+    return None
 
 
 # Abbreviations
