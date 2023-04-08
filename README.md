@@ -6,6 +6,11 @@ This repo contains my solutions to the homework as well as the final project.
 
 Professor: [Jane Yung-jen Hsu](https://iagentntu.github.io/professor/Jane.html), department of computer science and information @ National Taiwan University 
 
+## Homework assignments
+- HW0: DFS practice
+- HW1: implement DFS and BFS in pacman project
+- HW2: implement reflex agent, minimax agent, minimax with alpha-beta pruning agent and expectimax agent in pacman project 
+
 ## Course contents
 
 PART I - Introduction + Problem Solving and Search
@@ -36,6 +41,5 @@ PART IV - Advanced Topics
 - Computer Vision
 - Robotics 
 
-## Homework assignments
-- HW1: DFS, BFS
+
 
