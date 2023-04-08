@@ -1,0 +1,20 @@
+class: "EvalAgentTest"
+
+agentName: "ReflexAgent"
+layoutName: "AI22q1Test"
+maxTime: "15"
+numGames: "10"
+
+
+nonTimeoutMinimum: "10"
+
+scoreMinimum: "200"
+scoreThresholds: "500 1000 1450"
+
+winsMinimum: "1"
+winsThresholds: "5 9 10"
+
+thresholdPoints: "5 3 2"
+
+randomSeed: "0"
+ghosts: "[RandomGhost(1)]"
