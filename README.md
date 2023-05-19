@@ -10,6 +10,7 @@ Professor: [Jane Yung-jen Hsu](https://iagentntu.github.io/professor/Jane.html),
 - HW0: DFS practice
 - HW1: implement DFS and BFS in pacman project
 - HW2: implement reflex agent, minimax agent, minimax with alpha-beta pruning agent and expectimax agent in pacman project 
+- HW3: Object detection - implement non maximum surpression (NMS) algorithm
 
 ## Course contents
 
